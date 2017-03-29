@@ -1,0 +1,27 @@
+{
+  "name": "debounce",
+  "version": "0.0.1",
+  "description": "Groups rapid lines of stdin, and produces stdout or executes a command after each group.",
+  "main": "debounce.js",
+  "bin": "./debounce.js",
+  "preferGlobal": true,
+  "private": true,
+  "scripts": {
+    "eslint": "eslint --ext .js,.json debounce ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://git@github.com:chaimleib/debounce.git"
+  },
+  "keywords": [],
+  "author": "Chaim-Leib Halbert <chaim.leib.halbert@gmail.com>",
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "eslint": "^3.14.0",
+    "eslint-plugin-json": "^1.2.0"
+  },
+  "dependencies": {
+    "node-getopt": "^0.2.3",
+    "shell-quote": "^1.6.1"
+  }
+}
