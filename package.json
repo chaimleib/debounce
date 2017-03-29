@@ -1,6 +1,6 @@
 {
   "name": "debounce",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Groups rapid lines of stdin, and produces stdout or executes a command after each group.",
   "main": "debounce.js",
   "bin": "./debounce.js",

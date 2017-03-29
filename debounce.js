@@ -224,31 +224,42 @@ function main() {
       } else {
         output = debounced.length.toString();
       }
-      if (cfg.exec) {
-        const cmd = child_process.spawn(cmdName, cmdArgs);
-        cmd.stdout.resume();
-        cmd.stderr.resume();
-        cmd.stdin.resume();
-        cmd.stdout.on('data', data => { process.stdout.write(data); });
-        cmd.stderr.on('data', data => { process.stderr.write(data); });
-        cmd.on('close', code => {
-          if (code != 0 && !cfg.ignoreErrors) {
-            console.error(
-              "Error: passed " +
-              JSON.stringify(output) +
-              " into stdin of " +
-              JSON.stringify(cfg.exec));
-            process.exit(code);
-          }
-          return cb();
-        });
-        if (cfg.pipe) {
-          cmd.stdin.write(output + "\n");
-          cmd.stdin.end();
-        }
-      } else {
+      if (!cfg.exec) {
         console.log(output);
         return cb();
+      }
+      const cmd = child_process.spawn(cmdName, cmdArgs);
+      cmd.stdout.resume();
+      cmd.stderr.resume();
+      cmd.stdin.resume();
+      cmd.stdout.on('data', data => { process.stdout.write(data); });
+      cmd.stderr.on('data', data => { process.stderr.write(data); });
+      cmd.stdin.on('error', err => {
+        if (cfg.ignoreErrors) {
+          return;
+        }
+        let msg = `Error: could not write ${JSON.stringify(output)} into ` +
+          `stdin of command ${JSON.stringify(cfg.exec)}` + "\n" +
+          err;
+        console.error(msg);
+        process.exit(1);
+      });
+        
+      cmd.on('close', code => {
+        if (code == 0 || cfg.ignoreErrors) {
+          return cb();
+        }
+        let msg = `Error: command ${JSON.stringify(cfg.exec)} exited with `+
+          `a code of ${code}`;
+        if (cfg.pipe) {
+          msg += ` after passing ${JSON.stringify(output)} into stdin`;
+        }
+        console.error(msg);
+        process.exit(code);
+      });
+      if (cfg.pipe) {
+        cmd.stdin.write(output + "\n");
+        cmd.stdin.end();
       }
     },
     cfg.bootstrap);
