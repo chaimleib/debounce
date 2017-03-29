@@ -16,9 +16,10 @@ Groups rapid lines of stdin, and produces stdout or executes a command after eac
 ## Features
 * Usable either from the command line or as a JS library.
 * Can call other shell scripts.
+* Designed for asynchronous, long-running downstream handlers.
 * Never misses a trigger, even if the downstream handler hasn't finished yet.
-* If triggers arrive while the downstream handler is running, they are still debounced. The handler gets invoked again once it has finished and the debouncing timer has finished.
-* Output event can be passed customizable information about the trigger events that were debounced. (JS only)
+* If triggers arrive while the downstream handler is running, they are still debounced. The handler gets invoked again as soon as both it and the debouncing timer have finished.
+* Downstream handler can be passed customizable information about the trigger events that were debounced. (JS only)
 
 Copyright 2017 Evernote Corporation. All rights reserved.
 
