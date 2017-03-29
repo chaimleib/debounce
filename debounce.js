@@ -79,7 +79,7 @@ class Timer {
 const IDLE = "IDLE",     // waiting for a trigger
   TIMING = "TIMING",     // trigger received, not handling yet
   HANDLING = "HANDLING", // handler running, no triggers since it started
-  QUEUEING = "QUEUEING";  // handler running, got a trigger before it finished
+  QUEUEING = "QUEUEING"; // handler running, got a trigger before it finished
 
 // Waits for a pause between triggers longer than latency before invoking
 // handler. If bootstrap is true, invoke the handler immediately after setup.
@@ -262,8 +262,12 @@ function main() {
 }
 
 function getopts() {
+  const defaults = {
+    latency: 1500,
+  };
+
   const optConfig = new Getopt([
-    ['l', 'latency=ARG', 'how many milliseconds to debounce before emitting output or executing command (default: 2000)'],
+    ['l', 'latency=ARG', 'how many milliseconds to debounce before emitting output or executing command (default: '+defaults.latency+')'],
     ['b', 'bootstrap', 'trigger an event immediately'],
     ['t', 'timestamp', 'print timestamps instead of the debounced event count'],
     ['e', 'exec=ARG', 'execute a command after every group of events. Events arriving while the command runs are considered a single group.'],
@@ -291,8 +295,10 @@ function getopts() {
     process.exit(1);
   }
 
-  if (opts.latency === undefined) {
-    opts.latency = 2000;
+  for (opt of Object.keys(defaults)) {
+    if (opts[opt] === undefined) {
+      opts[opt] = defaults[opt];
+    }
   }
 
   return gotten;
@@ -321,3 +327,4 @@ function buildConfig(gotten) {
 
   return cfg;
 }
+
