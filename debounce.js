@@ -216,15 +216,20 @@ class CLI {
       ['h', 'help', 'display this help'],
     ]).bindHelp();
 
-    this.optConfig.setHelp(`
-${packageJSON.name} v${packageJSON.version}
-Groups rapid lines of stdin, and produces stdout or executes a command after each group.
+    const helpString = `
+      ${packageJSON.name} v${packageJSON.version}
+      Groups rapid lines of stdin, and produces stdout or executes a command after each group.
 
-Usage: ${packageJSON.name} [OPTION]
+      Usage: ${packageJSON.name} [OPTION]
 
-[[OPTIONS]]
-`.trim()+"\n"
-    );
+      [[OPTIONS]]
+      `.
+      slice(1).
+      split('\n').
+      map(line => line.trim()).
+      join('\n');
+
+    this.optConfig.setHelp(helpString);
   }
 
   run() {
