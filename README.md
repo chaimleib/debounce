@@ -1,10 +1,12 @@
 # debounce
 
 ```
-Usage: debounce [OPTION]
+debounce v1.0.1
 Groups rapid lines of stdin, and produces stdout or executes a command after each group.
 
-  -l, --latency=ARG    how many milliseconds to debounce before emitting output or executing command (default: 2000)
+Usage: debounce [OPTION]
+
+  -l, --latency=ARG    how many milliseconds to debounce before emitting output or executing command (default: 1500)
   -b, --bootstrap      trigger an event immediately
   -t, --timestamp      print timestamps instead of the debounced event count
   -e, --exec=ARG       execute a command after every group of events. Events arriving while the command runs are considered a single group.
