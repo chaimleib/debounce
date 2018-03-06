@@ -5,12 +5,12 @@ const Getopt = require('node-getopt');
 const shell_parse = require('shell-quote').parse;
 const packageJSON = require('./package.json');
 
-class Noticer {
+class Pubsub {
   constructor() {
     this.subscribers = {};
   }
 
-  post(event, data) {
+  publish(event, data) {
     // console.error('>> ' + event);
     if (data === undefined) {
       data = {};
@@ -88,18 +88,18 @@ const IDLE = "IDLE",     // waiting for a trigger
 class Debouncer {
   constructor(latency, bootstrap, handler) {
     this.debounced = [];
-    this.noticer = new Noticer();
-    this.noticer.subscribe("trigger", this.triggered.bind(this));
-    this.noticer.subscribe("bootstrap", this.bootstrapped.bind(this));
-    this.noticer.subscribe("timer done", this.timerFinished.bind(this));
-    this.noticer.subscribe("handler done", this.handlerFinished.bind(this));
+    this.pubsub = new Pubsub();
+    this.pubsub.subscribe("trigger", this.triggered.bind(this));
+    this.pubsub.subscribe("bootstrap", this.bootstrapped.bind(this));
+    this.pubsub.subscribe("timer done", this.timerFinished.bind(this));
+    this.pubsub.subscribe("handler done", this.handlerFinished.bind(this));
     this.timer = new Timer(
       latency,
-      () => { this.noticer.post("timer done"); });
+      () => { this.pubsub.publish("timer done"); });
     this.handler = handler;
     this._state = IDLE;
     if (bootstrap) {
-      this.noticer.post("bootstrap");
+      this.pubsub.publish("bootstrap");
     }
   }
 
@@ -114,7 +114,7 @@ class Debouncer {
 
   trigger(data) {
     setTimeout(() => {
-      this.noticer.post("trigger", data);
+      this.pubsub.publish("trigger", data);
     });
   }
 
@@ -123,7 +123,7 @@ class Debouncer {
       this.handler(
         this.debounced,
         () => {
-          this.noticer.post("handler done");
+          this.pubsub.publish("handler done");
           this.debounced = [];
         });
     });
