@@ -15,7 +15,7 @@ class Noticer {
     if (data === undefined) {
       data = {};
     }
-    if (!this.subscribers.hasOwnProperty(event)) {
+    if (!Object.prototype.hasOwnProperty.call(this.subscribers, event)) {
       return;
     }
     const eventInfo = Object.assign(
@@ -31,7 +31,7 @@ class Noticer {
   }
 
   subscribe(event, subscriber) {
-    if (!this.subscribers.hasOwnProperty(event)) {
+    if (!Object.prototype.hasOwnProperty.call(this.subscribers, event)) {
       this.subscribers[event] = [];
     }
     if (this.subscribers[event].includes(subscriber)) {
