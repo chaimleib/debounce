@@ -1,7 +1,7 @@
 # debounce
 
 ```
-debounce v1.0.1
+debounce v1.1.1
 Groups rapid lines of stdin, and produces stdout or executes a command after each group.
 
 Usage: debounce [OPTION]
@@ -23,5 +23,5 @@ Usage: debounce [OPTION]
 * If triggers arrive while the downstream handler is running, they are still debounced. The handler gets invoked again as soon as both it and the debouncing timer have finished.
 * Downstream handler can be passed customizable information about the trigger events that were debounced. (JS only)
 
-Copyright 2017 Evernote Corporation. All rights reserved.
+Copyright 2017-2019 Evernote Corporation. All rights reserved.
 
